@@ -1,0 +1,55 @@
+<form>
+  <label>Internal and External Traffic</label>
+  <fieldset submitButton="false">
+    <input type="time" token="field1">
+      <label></label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="dvc">
+      <label>Device</label>
+      <choice value="*">Any</choice>
+      <search>
+        <query>| `firewall_dvcs`</query>
+      </search>
+      <fieldForLabel>device_name</fieldForLabel>
+      <fieldForValue>dvc</fieldForValue>
+      <initialValue>*</initialValue>
+      <default>*</default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <table>
+        <title>Top External Destinations</title>
+        <search>
+          <query>| `firewall_tstats` count from datamodel=Network_Traffic.All_Traffic WHERE All_Traffic.dvc="$dvc$" `firewall_dest_external` by All_Traffic.dest_ip| sort - count | head 20 |  `drop_dm_object_name("All_Traffic")`</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="wrap">undefined</option>
+        <option name="rowNumbers">undefined</option>
+        <option name="drilldown">row</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+    <panel>
+      <table>
+        <title>Top Destinations for External Traffic</title>
+        <search>
+          <query>| `firewall_tstats` count from datamodel=Network_Traffic.All_Traffic WHERE All_Traffic.dvc="$dvc$" `firewall_src_external` by All_Traffic.dest_ip| sort - count | head 20 |  `drop_dm_object_name("All_Traffic")`</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="wrap">undefined</option>
+        <option name="rowNumbers">undefined</option>
+        <option name="drilldown">row</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+</form>

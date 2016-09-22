@@ -1,0 +1,151 @@
+<form>
+  <label>Scanning Activity</label>
+  <fieldset submitButton="false">
+    <input type="time" token="field1">
+      <label></label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="dvc">
+      <label>Device</label>
+      <choice value="*">Any</choice>
+      <search>
+        <query>| `network_traffic_dvcs`</query>
+      </search>
+      <fieldForLabel>device_name</fieldForLabel>
+      <fieldForValue>dvc</fieldForValue>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <chart>
+        <title>Possible Host Scanning Sources</title>
+        <search>
+          <query>| `network_traffic_tstats` dc(All_Traffic.dest_ip)  as dest_ip_count from datamodel=Network_Traffic.All_Traffic WHERE All_Traffic.dvc="$dvc$" by All_Traffic.src_ip| sort  10 - dest_ip_count |`drop_dm_object_name("All_Traffic")`</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="charting.chart">bar</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="count">10</option>
+        <drilldown>
+          <link>
+            <![CDATA[
+			ip_profile?form.dvc=$dvc$&form.ip_address=$click.value$&earliest=$earliest$&latest=$latest$&form.time_picker1.earliest=$earliest$&form.time_picker1.latest=$latest$
+          ]]>
+          </link>
+        </drilldown>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Possible Port Scanning Sources</title>
+        <search>
+          <query>| `network_traffic_tstats` dc(All_Traffic.dest_port)  as dest_port_count from datamodel=Network_Traffic.All_Traffic WHERE All_Traffic.dvc="$dvc$" by All_Traffic.src_ip| sort  10 - dest_port_count |`drop_dm_object_name("All_Traffic")`</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="charting.chart">bar</option>
+        <drilldown>
+          <link>
+            <![CDATA[
+			ip_profile?form.dvc=$dvc$&form.ip_address=$click.value$&earliest=$earliest$&latest=$latest$&form.time_picker1.earliest=$earliest$&form.time_picker1.latest=$latest$
+          ]]>
+          </link>
+        </drilldown>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Port Scanning Targets</title>
+        <search>
+          <query>| `network_traffic_tstats` dc(All_Traffic.dest_port)  as dest_port_count from datamodel=Network_Traffic.All_Traffic WHERE All_Traffic.dvc="$dvc$" by All_Traffic.dest_ip| sort  10 - dest_port_count |`drop_dm_object_name("All_Traffic")`</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="charting.chart">bar</option>
+        <drilldown>
+          <link>
+            <![CDATA[
+			ip_profile?form.dvc=$dvc$&form.ip_address=$click.value$&earliest=$earliest$&latest=$latest$&form.time_picker1.earliest=$earliest$&form.time_picker1.latest=$latest$
+          ]]>
+          </link>
+        </drilldown>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">none</option>
+      </chart>
+    </panel>
+  </row>
+</form>

@@ -1,0 +1,11 @@
+<nav search_view="search" color="#CC0012">
+  <view name="overview" default='true' />
+  <view name="ip_profile" />
+  <view name="transport_information" />
+  <view name="port_information" />
+  <view name="internal_and_external_traffic" />
+  <view name="scanning_activity" />
+  <view name="geographic_information" />
+  <view name="network_traffic_search" />
+  <view name="search" />
+</nav>

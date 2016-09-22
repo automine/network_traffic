@@ -1,0 +1,109 @@
+<form>
+  <label>Network Traffic Search</label>
+  <fieldset submitButton="true">
+    <input type="time" token="field1">
+      <label></label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="dvc">
+      <label>Device</label>
+      <choice value="*">Any</choice>
+      <search>
+        <query>| `firewall_dvcs`</query>
+      </search>
+      <fieldForLabel>device_name</fieldForLabel>
+      <fieldForValue>dvc</fieldForValue>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+    <input type="text" token="src_ip">
+      <label>Source IP</label>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+    <input type="text" token="dest_ip">
+      <label>Dest IP</label>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+    <input type="text" token="dest_port">
+      <label>Destination Port</label>
+      <initialValue>*</initialValue>
+      <default>*</default>
+    </input>
+    <input type="multiselect" token="transport">
+      <label>Transport</label>
+      <search>
+        <query>| `cim_transport_protocols`</query>
+      </search>
+      <fieldForLabel>transport</fieldForLabel>
+      <fieldForValue>transport</fieldForValue>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>All_Traffic.transport="</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter> OR </delimiter>
+      <choice value="*">Any</choice>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+    <input type="multiselect" token="action">
+      <label>Action</label>
+      <choice value="*">Any</choice>
+      <search>
+        <query>| `cim_traffic_actions`</query>
+      </search>
+      <fieldForLabel>action</fieldForLabel>
+      <fieldForValue>action</fieldForValue>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+      <delimiter> OR </delimiter>
+      <valuePrefix>All_Traffic.action="</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <initialValue>*</initialValue>
+      <default>*</default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <table>
+        <title>Traffic Summary</title>
+        <search>
+          <query>| `firewall_tstats` count from datamodel=Network_Traffic.All_Traffic WHERE All_Traffic.src_ip="$src_ip$" All_Traffic.dest_ip="$dest_ip$" $action$ All_Traffic.dest_port="$dest_port$" $transport$  All_Traffic.dvc="$dvc$" by All_Traffic.src All_Traffic.dest All_Traffic.dest_port All_Traffic.transport All_Traffic.action  | `drop_dm_object_name(All_Traffic)`</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="wrap">undefined</option>
+        <option name="rowNumbers">undefined</option>
+        <option name="drilldown">row</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <event>
+        <title>Events</title>
+        <search>
+          <query>| datamodel Network_Traffic All_Traffic search | search All_Traffic.src_ip="$src_ip$" All_Traffic.dest_ip="$dest_ip$" (All_Traffic.action="$action$") All_Traffic.dest_port="$dest_port$" (All_Traffic.transport="$transport$") (All_Traffic.dvc="$dvc$" | `drop_dm_object_name(All_Traffic)` | fields + host source sourcetype src dest action dest_port transport</query>
+          <earliest>$field1.earliest$</earliest>
+          <latest>$field1.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="list.drilldown">full</option>
+        <option name="list.wrap">1</option>
+        <option name="maxLines">5</option>
+        <option name="raw.drilldown">full</option>
+        <option name="rowNumbers">0</option>
+        <option name="table.drilldown">all</option>
+        <option name="table.wrap">1</option>
+        <option name="type">list</option>
+        <fields>["host","source","sourcetype"]</fields>
+      </event>
+    </panel>
+  </row>
+</form>
