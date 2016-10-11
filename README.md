@@ -91,10 +91,10 @@ This macro contains a partial search which determines when a network traffic eve
 
 ### Device Dropdown Lookup
 
-Can use the auto-generated, which runs every morning at 2 am
-If the data model is populated, you can run the saved search `network_traffic_dvc_auto_gen`
-Has two fields: `dvc` and `device_name`
-device_name can be a description of the device, dvc can be wild-carded (not CIDR, as that is not available in `tstats` searches used with the accelerated data models). The search used to populate this dropdown can be configured using the `network_traffic_dvcs` macro.
+For the "Device" dropdown, present on many of the dashboards, you can use the auto-generated lookup, which runs every morning at 2 am.
+If your `Network_Traffic` data model is populated, you can run the saved search `network_traffic_dvc_auto_gen` to populate the dropdown.
+
+The lookup has two fields: `dvc` and `device_name`. `device_name` can be a description of the device. `dvc` can be wild-carded (not CIDR, as that is not available in `tstats` searches used with the accelerated data models). The search used to populate this dropdown can be configured using the `network_traffic_dvcs` macro.
 
 ## Future Plans
 
@@ -122,6 +122,10 @@ The git repo for this app is located [here](https://github.com/automine/network_
 - Icons made by [Madebyoliver](http://www.flaticon.com/authors/madebyoliver) from [www.flaticon.com](http://www.flaticon.com) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
 
 ## Release Notes
+
+### 1.1
+* Removed default csv file for device dropdown
+* Edited README.md to fix section on the device dropdown
 
 ### 1.0
 
