@@ -33,3 +33,12 @@ export = system
 [viewstates]
 access = read : [ * ], write : [ * ]
 export = system
+
+[macros]
+access = read : [ * ], write : [ admin ]
+export = system
+owner = admin
+
+[savedsearches/network_traffic_dvc_auto_gen]
+access = read : [ * ], write : [ admin, power ]
+export = none

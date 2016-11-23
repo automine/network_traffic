@@ -123,6 +123,11 @@ The git repo for this app is located [here](https://github.com/automine/network_
 
 ## Release Notes
 
+### 1.2
+* Removed backup directory from views directory
+* Removed README from views directory
+* Removed local.meta
+
 ### 1.1
 * Removed default csv file for device dropdown
 * Edited README.md to fix section on the device dropdown
