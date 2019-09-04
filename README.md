@@ -1,5 +1,8 @@
 # Network Traffic App for Splunk
 
+## Deprecation Warning!!!
+__This app has been deprecated. There will be no new development or bug fixes. It has been replaced by the [Aplura Network Traffic App for Splunk](https://splunkbase.splunk.com/app/4229/).__
+
 ## Overview
 Very often, network traffic events can provide a lot of information about misconfigurations, potential attacks, and user activity. This app provides searches and dashboards based on the [Splunk Common Information Model](https://docs.splunk.com/Documentation/CIM/latest/User/Overview) to help provide insight into your network traffic.
 
@@ -122,6 +125,9 @@ The git repo for this app is located [here](https://github.com/automine/network_
 - Icons made by [Madebyoliver](http://www.flaticon.com/authors/madebyoliver) from [www.flaticon.com](http://www.flaticon.com) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
 
 ## Release Notes
+
+### 1.2.1
+* Added deprecation warning and link to replacement.
 
 ### 1.2
 * Removed backup directory from views directory
